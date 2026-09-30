@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { Button } from "~/components/ui/button";
-import { LogOut, HomeIcon, UserIcon, LogOutIcon, CircleUserRoundIcon, CreditCardIcon, BellIcon } from "lucide-react";
+import { LogOutIcon, CircleUserRoundIcon, CreditCardIcon, BellIcon } from "lucide-react";
 import { ThemeSegmentControl } from "./theme-segment-control";
 import { useRouter } from "next/navigation";
 import {
@@ -97,9 +97,11 @@ export function UserButton() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <CircleUserRoundIcon />
-            Account
+          <DropdownMenuItem asChild>
+            <Link href="/profile">
+              <CircleUserRoundIcon />
+              Account
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <CreditCardIcon />
@@ -111,7 +113,7 @@ export function UserButton() {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={() => router.push("/login")}>
           <LogOutIcon />
           Log out
         </DropdownMenuItem>

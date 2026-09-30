@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter, JetBrains_Mono  } from "next/font/google";
+import { Geist, Geist_Mono, Inter } from "next/font/google";
 import { cn } from "~/lib/utils";
 import { TooltipProvider } from "~/components/ui/tooltip";
 
@@ -19,18 +19,6 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
-
-const fontSans = Geist_Mono({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
-
-const fontMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-});
-
-
 
 export const metadata: Metadata = {
   title: "SchoolERP — Modern School Management Platform",
