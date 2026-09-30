@@ -1,0 +1,58 @@
+[
+  {
+    "id": 4,
+    "school_name": "Lekki British International School",
+    "admin_name": "Mrs. Folashade Adeoti",
+    "email": "folashade@lekkibritish.org",
+    "phone": "+234 803 777 6655",
+    "student_count": "1,500+ students",
+    "plan_selected": "Enterprise (Custom — Discuss with Sales Rep)",
+    "currency": "NGN",
+    "country": "Nigeria",
+    "notes": "Testing live write to Neon PostgreSQL table institution_requests",
+    "status": "pending_review",
+    "created_at": "2026-09-30T14:27:01.572Z"
+  },
+  {
+    "school_name": "Kingsway College Lagos",
+    "admin_name": "Prof. Emmanuel Danjuma",
+    "email": "principal@kingsway.sch.ng",
+    "phone": "+234 802 999 8888",
+    "student_count": "300 - 1,500 students",
+    "plan_selected": "Growth Plan (₦120,000/mo)",
+    "currency": "NGN",
+    "country": "Nigeria",
+    "notes": "Testing institution submission to Neon database",
+    "status": "pending_review",
+    "id": 3,
+    "created_at": "2026-09-30T11:38:26.265Z"
+  },
+  {
+    "id": 1,
+    "school_name": "Oakridge International Academy",
+    "admin_name": "Dr. Sarah Vance",
+    "email": "s.vance@oakridge.edu",
+    "phone": "+234 803 456 7890",
+    "student_count": "300 - 1,500 students",
+    "plan_selected": "Growth Plan (₦120,000/mo)",
+    "currency": "NGN",
+    "country": "Nigeria",
+    "notes": "Need secondary school SIS, parent fee billing portal in Naira, and attendance tracker.",
+    "status": "active_trial",
+    "created_at": "2026-09-28T11:38:26.264Z"
+  },
+  {
+    "id": 2,
+    "school_name": "Corona High School Lekki",
+    "admin_name": "Engr. Patrick Alabi",
+    "email": "admin@coronalekki.sch.ng",
+    "phone": "+234 802 334 1122",
+    "student_count": "1,500+ students",
+    "plan_selected": "Enterprise Custom (₦250,000/mo)",
+    "currency": "NGN",
+    "country": "Nigeria",
+    "notes": "Multi-campus branch deployment with custom fee collection gateway.",
+    "status": "pending_review",
+    "created_at": "2026-09-29T11:38:26.264Z"
+  }
+]

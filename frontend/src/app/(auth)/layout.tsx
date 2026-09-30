@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "SchoolERP - Login",
-  description: "Login to your SchoolERP account",
+  title: "Cresta-ERP — Cresta Institutional Platform",
+  description: "Secure institutional sign-in for Cresta-ERP: CRESTA — Powering Institutions of Excellence.",
 };
 
 export default function AuthLayout({

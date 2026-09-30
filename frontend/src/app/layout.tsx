@@ -7,6 +7,7 @@ import "./globals.css";
 import { ThemeProvider } from "~/providers/theme-provider";
 import { ToasterProvider } from "~/providers/toast-provider";
 import ReactQueryProvider from "~/providers/react-query-provider";
+import { DemoRoleProvider } from "~/providers/demo-role-provider";
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -21,9 +22,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SchoolERP — Modern School Management Platform",
+  title: "Cresta-ERP — Cresta Institutional Platform — CRESTA — Powering Institutions of Excellence",
   description:
-    "SchoolERP unifies academics, finance, HR, and communication on a single platform. Trusted by 500+ schools.",
+    "Cresta-ERP: The Cresta Institutional Platform powering institutions of excellence. Unifying academics, finance, administration, and campus operations.",
 };
 
 export default function RootLayout({
@@ -50,10 +51,12 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <ReactQueryProvider>
-            <TooltipProvider>
-              {children}
-            </TooltipProvider>
-            <ToasterProvider />
+            <DemoRoleProvider>
+              <TooltipProvider>
+                {children}
+              </TooltipProvider>
+              <ToasterProvider />
+            </DemoRoleProvider>
           </ReactQueryProvider>
         </ThemeProvider>
       </body>

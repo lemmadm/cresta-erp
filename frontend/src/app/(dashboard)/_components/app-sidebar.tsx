@@ -29,9 +29,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:p-1.5!"
             >
-              <Link href="/dashboard">
-                <FaBookOpenReader className="size-6!" />
-                <span className="text-base font-semibold">School ERP</span>
+              <Link href="/dashboard" className="flex items-center gap-2.5">
+                <div className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                  <FaBookOpenReader className="size-4" />
+                </div>
+                <div className="flex flex-col leading-none">
+                  <span className="text-sm font-bold tracking-tight">Cresta-ERP</span>
+                  <span className="text-[10px] text-muted-foreground font-medium tracking-tight mt-0.5">
+                    Institutions of Excellence
+                  </span>
+                </div>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

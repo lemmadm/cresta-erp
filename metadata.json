@@ -1,6 +1,6 @@
 {
   "name": "Cresta SchoolERP",
-  "description": "SchoolERP unifies academics, finance, HR, and communication on a single platform.",
+  "description": "Cresta Institutional Platform — CRESTA — Powering Institutions of Excellence",
   "permissions": [],
   "capabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

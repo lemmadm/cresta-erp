@@ -15,10 +15,13 @@ export function Footer() {
               <div className="flex size-7 items-center justify-center rounded-lg bg-primary">
                 <GraduationCap className="size-4 text-primary-foreground" />
               </div>
-              <span className="font-semibold">SchoolERP</span>
+              <span className="font-bold tracking-tight">Cresta-ERP</span>
             </Link>
-            <p className="mt-3 text-xs text-muted-foreground">
-              The modern school management platform built for the 21st century.
+            <p className="mt-2 text-xs font-medium text-foreground">
+              CRESTA — Powering Institutions of Excellence
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Cresta Institutional Platform: Academic, administrative, and financial operating system.
             </p>
           </div>
 
@@ -58,10 +61,10 @@ export function Footer() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 sm:flex-row">
           <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} SchoolERP. All rights reserved.
+            © {new Date().getFullYear()} Cresta-ERP · Cresta Institutional Platform. All rights reserved.
           </p>
-          <p className="text-xs text-muted-foreground">
-            Made with ♥ for educators everywhere
+          <p className="text-xs text-muted-foreground font-medium">
+            CRESTA — Powering Institutions of Excellence
           </p>
         </div>
       </div>

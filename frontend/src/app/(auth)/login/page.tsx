@@ -25,13 +25,16 @@ export default function LoginPage() {
     <div className="min-h-screen flex flex-col justify-center items-center p-4 bg-muted/30">
       <div className="w-full max-w-md space-y-6">
         <div className="text-center space-y-2">
-          <Link href="/" className="inline-flex items-center gap-2 font-bold text-xl tracking-tight">
-            <div className="flex size-9 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm">
-              <GraduationCap className="size-5" />
+          <Link href="/" className="inline-flex items-center gap-2.5 font-bold text-xl tracking-tight">
+            <div className="flex size-10 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm">
+              <GraduationCap className="size-6" />
             </div>
-            <span>SchoolERP</span>
+            <div className="flex flex-col text-left">
+              <span className="text-xl font-bold tracking-tight">Cresta-ERP</span>
+              <span className="text-[10px] text-muted-foreground font-medium">CRESTA — Powering Institutions of Excellence</span>
+            </div>
           </Link>
-          <p className="text-sm text-muted-foreground">Sign in to your institutional portal</p>
+          <p className="text-xs text-muted-foreground mt-1">Cresta Institutional Platform &bull; Sign in to access your administrative suite</p>
         </div>
 
         <Card className="border-border shadow-sm">
