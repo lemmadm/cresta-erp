@@ -7,16 +7,10 @@ import {
   Award,
   CreditCard,
   User,
-  Phone,
-  MapPin,
   HeartPulse,
   Smartphone,
   Download,
-  CheckCircle2,
-  AlertCircle,
-  Clock,
   Sparkles,
-  BookOpen,
 } from "lucide-react"
 import { toast } from "sonner"
 import {
