@@ -27,6 +27,8 @@ import {
   BarChart3,
   Check,
   ExternalLink,
+  UploadCloud,
+  FileCheck,
 } from "lucide-react"
 import {
   ResponsiveContainer,
@@ -51,6 +53,17 @@ import { useDemoRole } from "~/providers/demo-role-provider"
 import { DemoRoleBanner } from "~/components/demo-role-banner"
 import { CreateInstitutionDialog } from "~/components/create-institution-dialog"
 import { StudentProfileDialog } from "~/components/student-profile-dialog"
+import {
+  BankTransferUploaderDialog,
+  BankTransferSubmission,
+} from "~/components/bank-transfer-uploader-dialog"
+import {
+  BursarApprovalQueueDialog,
+  INITIAL_BURSAR_SUBMISSIONS,
+} from "~/components/bursar-approval-queue-dialog"
+import { OfficialReportCardDialog } from "~/components/official-report-card-dialog"
+import { NewGradeEntryDialog } from "~/components/new-grade-entry-dialog"
+import { TeacherWeeklyCalendarView } from "~/components/teacher-weekly-calendar-view"
 
 // --- DATA STRUCTURES ---
 
@@ -231,6 +244,35 @@ export default function DashboardPage() {
   const { role, activeChild } = useDemoRole()
   const [institutionModalOpen, setInstitutionModalOpen] = React.useState(false)
   const [selectedStudentForModal, setSelectedStudentForModal] = React.useState<string | null>(null)
+  const [bursarQueueOpen, setBursarQueueOpen] = React.useState(false)
+  const [bankTransferOpen, setBankTransferOpen] = React.useState(false)
+  const [reportCardStudent, setReportCardStudent] = React.useState<string | null>(null)
+  const [bursarSubmissions, setBursarSubmissions] = React.useState<BankTransferSubmission[]>(INITIAL_BURSAR_SUBMISSIONS)
+  const [gradeEntryOpen, setGradeEntryOpen] = React.useState(false)
+  const [gradeEntrySubject, setGradeEntrySubject] = React.useState("Biology")
+  const [gradeEntryClass, setGradeEntryClass] = React.useState("Grade 10-A (SSS 1)")
+
+  const handleOpenGradeEntry = (subject?: string, classArm?: string) => {
+    if (subject) setGradeEntrySubject(subject)
+    if (classArm) setGradeEntryClass(classArm)
+    setGradeEntryOpen(true)
+  }
+
+  const handleApproveTransfer = (id: string) => {
+    setBursarSubmissions((prev) =>
+      prev.map((s) => (s.id === id ? { ...s, status: "verified_paid" } : s))
+    )
+  }
+
+  const handleRejectTransfer = (id: string, reason: string) => {
+    setBursarSubmissions((prev) =>
+      prev.map((s) => (s.id === id ? { ...s, status: "rejected", rejectionReason: reason } : s))
+    )
+  }
+
+  const handleNewTransferSubmission = (newSub: BankTransferSubmission) => {
+    setBursarSubmissions((prev) => [newSub, ...prev])
+  }
 
   // Teacher interactive attendance state
   const [teacherRoll, setTeacherRoll] = React.useState([
@@ -460,6 +502,17 @@ export default function DashboardPage() {
                 </p>
               </div>
               <div className="flex flex-wrap items-center gap-2 shrink-0">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => setBursarQueueOpen(true)}
+                  className="h-9 gap-1.5 text-xs font-semibold border-emerald-400 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/20"
+                >
+                  <FileCheck className="size-4 text-emerald-600" />
+                  <span>
+                    Bursar Approvals ({bursarSubmissions.filter((s) => s.status === "pending_verification").length})
+                  </span>
+                </Button>
                 <Button
                   size="sm"
                   variant="outline"
@@ -907,10 +960,20 @@ export default function DashboardPage() {
                   Today is Wednesday, Sep 30 &bull; 4 Teaching Periods Scheduled &bull; Next Class: Biology Lab (10:15 AM)
                 </p>
               </div>
-              <Button onClick={saveRollCall} className="gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs h-9">
-                <Check className="size-4" />
-                <span>Save Today&apos;s Class Attendance</span>
-              </Button>
+              <div className="flex flex-wrap items-center gap-2">
+                <Button
+                  size="sm"
+                  onClick={() => handleOpenGradeEntry("Biology", "Grade 10-A (SSS 1)")}
+                  className="gap-1.5 bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-xs h-9 shadow-xs"
+                >
+                  <Award className="size-4" />
+                  <span>New Grade Entry</span>
+                </Button>
+                <Button onClick={saveRollCall} className="gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs h-9">
+                  <Check className="size-4" />
+                  <span>Save Today&apos;s Class Attendance</span>
+                </Button>
+              </div>
             </div>
           </div>
 
@@ -989,9 +1052,29 @@ export default function DashboardPage() {
                       Click status button to toggle Present / Absent / Late for each student
                     </CardDescription>
                   </div>
-                  <Button size="sm" onClick={saveRollCall} className="h-7 text-xs bg-emerald-600 hover:bg-emerald-700">
-                    Save Roll
-                  </Button>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => handleOpenGradeEntry("Biology", "Grade 10-A (SSS 1)")}
+                      className="h-7 text-xs border-emerald-400 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/20 gap-1 font-semibold"
+                    >
+                      <Award className="size-3 text-emerald-600" />
+                      <span>New Grade Entry</span>
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => setReportCardStudent("Samuel Adeyemi")}
+                      className="h-7 text-xs border-primary/40 text-primary hover:bg-primary/10 gap-1 font-semibold"
+                    >
+                      <FileText className="size-3" />
+                      <span>Term Report Cards</span>
+                    </Button>
+                    <Button size="sm" onClick={saveRollCall} className="h-7 text-xs bg-emerald-600 hover:bg-emerald-700">
+                      Save Roll
+                    </Button>
+                  </div>
                 </div>
               </CardHeader>
               <CardContent className="pt-3">
@@ -1062,41 +1145,8 @@ export default function DashboardPage() {
             </Card>
           </div>
 
-          {/* Teacher Daily Timetable */}
-          <Card className="border-border shadow-xs">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-base font-bold">Today&apos;s Class Timetable</CardTitle>
-              <CardDescription className="text-xs">Daily instructional periods and lab rotations</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid gap-3 sm:grid-cols-4">
-                <div className="p-3 rounded-lg border border-emerald-400 bg-emerald-500/5">
-                  <Badge className="bg-emerald-600 text-white text-[10px]">08:30 - 09:30 AM</Badge>
-                  <p className="font-bold text-sm text-foreground mt-2">Grade 10-A Biology</p>
-                  <p className="text-xs text-muted-foreground">Cellular Genetics &bull; Room 204</p>
-                  <span className="text-[10px] text-emerald-600 font-semibold mt-1 inline-block">✓ Completed</span>
-                </div>
-                <div className="p-3 rounded-lg border border-primary bg-primary/5">
-                  <Badge className="bg-primary text-primary-foreground text-[10px]">10:15 - 11:45 AM</Badge>
-                  <p className="font-bold text-sm text-foreground mt-2">Chemistry Practical Lab</p>
-                  <p className="text-xs text-muted-foreground">Grade 11 Science &bull; Lab #2</p>
-                  <span className="text-[10px] text-primary font-semibold mt-1 inline-block">● Next Class</span>
-                </div>
-                <div className="p-3 rounded-lg border bg-muted/20">
-                  <Badge variant="outline" className="text-[10px]">01:00 - 02:00 PM</Badge>
-                  <p className="font-bold text-sm text-foreground mt-2">Physics Tutorial</p>
-                  <p className="text-xs text-muted-foreground">Grade 10-B &bull; Room 208</p>
-                  <span className="text-[10px] text-muted-foreground mt-1 inline-block">Upcoming</span>
-                </div>
-                <div className="p-3 rounded-lg border bg-muted/20">
-                  <Badge variant="outline" className="text-[10px]">02:30 - 03:30 PM</Badge>
-                  <p className="font-bold text-sm text-foreground mt-2">STEM Mentorship</p>
-                  <p className="text-xs text-muted-foreground">Science Club &bull; Innovation Hall</p>
-                  <span className="text-[10px] text-muted-foreground mt-1 inline-block">Upcoming</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          {/* Teacher Interactive Weekly Calendar View (All Teaching Periods Grid) */}
+          <TeacherWeeklyCalendarView onOpenNewGradeEntry={handleOpenGradeEntry} />
         </div>
       )}
 
@@ -1317,12 +1367,12 @@ export default function DashboardPage() {
                     <span>Download Receipts</span>
                   </Button>
                   <Button
-                    onClick={() => setParentPaymentOpen(true)}
+                    onClick={() => setBankTransferOpen(true)}
                     size="sm"
-                    className="flex-1 text-xs bg-purple-600 hover:bg-purple-700 text-white gap-1.5"
+                    className="flex-1 text-xs bg-emerald-600 hover:bg-emerald-700 text-white gap-1.5 font-semibold"
                   >
-                    <CreditCard className="size-3.5" />
-                    <span>Pay Pending ₦35,000</span>
+                    <UploadCloud className="size-3.5" />
+                    <span>Upload Bank Slip (₦0 Fee)</span>
                   </Button>
                 </div>
               </CardContent>
@@ -1333,10 +1383,23 @@ export default function DashboardPage() {
           <div className="grid gap-6 lg:grid-cols-12">
             <Card className="lg:col-span-7 border-border shadow-xs">
               <CardHeader className="pb-3 border-b">
-                <CardTitle className="text-base font-bold">Academic Performance &amp; Subject Grades</CardTitle>
-                <CardDescription className="text-xs">
-                  Mid-term continuous assessment scores &bull; Grade 10-A
-                </CardDescription>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle className="text-base font-bold">Academic Performance &amp; Subject Grades</CardTitle>
+                    <CardDescription className="text-xs">
+                      Mid-term continuous assessment scores &bull; Grade 10-A
+                    </CardDescription>
+                  </div>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setReportCardStudent(activeChild)}
+                    className="h-8 text-xs gap-1.5 border-primary/40 text-primary font-semibold hover:bg-primary/10"
+                  >
+                    <FileText className="size-3.5" />
+                    <span>Official Report Card</span>
+                  </Button>
+                </div>
               </CardHeader>
               <CardContent className="pt-4">
                 <div className="space-y-3">
@@ -1484,6 +1547,44 @@ export default function DashboardPage() {
         studentName={selectedStudentForModal}
         open={!!selectedStudentForModal}
         onOpenChange={(open) => !open && setSelectedStudentForModal(null)}
+      />
+
+      {/* BANK TRANSFER PROOF UPLOADER DIALOG */}
+      <BankTransferUploaderDialog
+        open={bankTransferOpen}
+        onOpenChange={setBankTransferOpen}
+        defaultStudent={activeChild}
+        defaultInvoiceId="INV-2026-085"
+        defaultAmount="₦35,000"
+        defaultFeeType="School Bus Shuttle (Route #4)"
+        onSubmitted={handleNewTransferSubmission}
+      />
+
+      {/* BURSAR BANK TRANSFER APPROVAL QUEUE DIALOG */}
+      <BursarApprovalQueueDialog
+        open={bursarQueueOpen}
+        onOpenChange={setBursarQueueOpen}
+        submissions={bursarSubmissions}
+        onApprove={handleApproveTransfer}
+        onReject={handleRejectTransfer}
+      />
+
+      {/* OFFICIAL TERM REPORT CARD DIALOG */}
+      <OfficialReportCardDialog
+        studentName={reportCardStudent}
+        open={!!reportCardStudent}
+        onOpenChange={(open) => !open && setReportCardStudent(null)}
+      />
+
+      {/* NEW GRADE ENTRY CONTINUOUS ASSESSMENT MODAL */}
+      <NewGradeEntryDialog
+        open={gradeEntryOpen}
+        onOpenChange={setGradeEntryOpen}
+        initialSubject={gradeEntrySubject}
+        initialClass={gradeEntryClass}
+        onGradesSaved={() => {
+          toast.success("Grade entries synchronized across teacher dashboard.")
+        }}
       />
     </div>
   )

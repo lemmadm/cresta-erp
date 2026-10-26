@@ -14,8 +14,8 @@ import {
   ShieldCheck,
   UploadCloud,
   FileCheck,
-  Check,
   ExternalLink,
+  FileText,
 } from "lucide-react"
 import { toast } from "sonner"
 import { Button } from "~/components/ui/button"
@@ -25,6 +25,18 @@ import { Input } from "~/components/ui/input"
 import { CreateInstitutionDialog } from "~/components/create-institution-dialog"
 import { AcademicCalendarView } from "~/components/academic-calendar-view"
 import { StudentProfileDialog } from "~/components/student-profile-dialog"
+import {
+  BankTransferUploaderDialog,
+  BankTransferSubmission,
+} from "~/components/bank-transfer-uploader-dialog"
+import {
+  BursarApprovalQueueDialog,
+  INITIAL_BURSAR_SUBMISSIONS,
+} from "~/components/bursar-approval-queue-dialog"
+import { OfficialReportCardDialog } from "~/components/official-report-card-dialog"
+import { NewGradeEntryDialog } from "~/components/new-grade-entry-dialog"
+import { TeacherWeeklyCalendarView } from "~/components/teacher-weekly-calendar-view"
+import { Award } from "lucide-react"
 
 interface ModuleViewProps {
   slug: string[]
@@ -37,6 +49,42 @@ export function ModuleView({ slug }: ModuleViewProps) {
   const [searchQuery, setSearchQuery] = React.useState("")
   const [instModalOpen, setInstModalOpen] = React.useState(false)
   const [selectedStudentForModal, setSelectedStudentForModal] = React.useState<string | null>(null)
+  const [bursarQueueOpen, setBursarQueueOpen] = React.useState(false)
+  const [bankTransferOpen, setBankTransferOpen] = React.useState(false)
+  const [reportCardStudent, setReportCardStudent] = React.useState<string | null>(null)
+  const [bursarSubmissions, setBursarSubmissions] = React.useState<BankTransferSubmission[]>(INITIAL_BURSAR_SUBMISSIONS)
+  const [gradeEntryOpen, setGradeEntryOpen] = React.useState(false)
+  const [gradeEntrySubject, setGradeEntrySubject] = React.useState("Biology")
+  const [gradeEntryClass, setGradeEntryClass] = React.useState("Grade 10-A (SSS 1)")
+
+  const handleOpenGradeEntry = (subject?: string, classArm?: string) => {
+    if (subject) setGradeEntrySubject(subject)
+    if (classArm) setGradeEntryClass(classArm)
+    setGradeEntryOpen(true)
+  }
+
+  const handleApproveTransfer = (id: string) => {
+    setBursarSubmissions((prev) =>
+      prev.map((s) => (s.id === id ? { ...s, status: "verified_paid" } : s))
+    )
+    setFeeInvoices((prev) =>
+      prev.map((inv) =>
+        inv.id === "INV-2026-083" || inv.id === "INV-2026-085"
+          ? { ...inv, status: "Paid", verified: true }
+          : inv
+      )
+    )
+  }
+
+  const handleRejectTransfer = (id: string, reason: string) => {
+    setBursarSubmissions((prev) =>
+      prev.map((s) => (s.id === id ? { ...s, status: "rejected", rejectionReason: reason } : s))
+    )
+  }
+
+  const handleNewTransferSubmission = (newSub: BankTransferSubmission) => {
+    setBursarSubmissions((prev) => [newSub, ...prev])
+  }
 
   // Zero-Cost Click-to-WhatsApp (wa.me) State
   const [whatsAppRecipientPhone, setWhatsAppRecipientPhone] = React.useState("2348031112233")
@@ -378,7 +426,28 @@ export function ModuleView({ slug }: ModuleViewProps) {
                     Supports direct bank deposits (GTB, Zenith, First Bank) with receipt upload verification to avoid online payment processor fees
                   </CardDescription>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setBursarQueueOpen(true)}
+                    className="h-8 text-xs gap-1.5 border-emerald-400 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 font-semibold hover:bg-emerald-500/20"
+                  >
+                    <FileCheck className="size-3.5 text-emerald-600" />
+                    <span>
+                      Bursar Approvals ({bursarSubmissions.filter((s) => s.status === "pending_verification").length})
+                    </span>
+                  </Button>
+
+                  <Button
+                    size="sm"
+                    onClick={() => setBankTransferOpen(true)}
+                    className="h-8 text-xs gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold"
+                  >
+                    <UploadCloud className="size-3.5" />
+                    <span>Upload Bank Slip</span>
+                  </Button>
+
                   <Button
                     variant="outline"
                     size="sm"
@@ -451,14 +520,25 @@ export function ModuleView({ slug }: ModuleViewProps) {
                         </td>
                         <td className="p-2.5 text-center">
                           {inv.status === "Pending Verification" ? (
-                            <Button
-                              size="sm"
-                              onClick={() => handleVerifyBankSlip(inv.id)}
-                              className="h-7 text-xs bg-emerald-600 hover:bg-emerald-700 text-white gap-1 px-2"
-                            >
-                              <Check className="size-3" />
-                              <span>Verify Slip</span>
-                            </Button>
+                            <div className="flex items-center justify-center gap-1.5">
+                              <Button
+                                size="sm"
+                                onClick={() => setBursarQueueOpen(true)}
+                                className="h-7 text-xs bg-emerald-600 hover:bg-emerald-700 text-white gap-1 px-2 font-semibold"
+                              >
+                                <FileCheck className="size-3" />
+                                <span>Audit</span>
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => handleVerifyBankSlip(inv.id)}
+                                className="h-7 text-xs border-emerald-400 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/10 px-2 font-semibold"
+                                title="Instant 1-Click Verification"
+                              >
+                                Approve
+                              </Button>
+                            </div>
                           ) : (
                             <Button
                               variant="ghost"
@@ -504,7 +584,25 @@ export function ModuleView({ slug }: ModuleViewProps) {
                     Nigerian 4-tier assessment model (CA 1: 10%, CA 2: 10%, Mid-Term: 20%, Terminal Exam: 60% = 100%). Automated broadsheet calculations eliminate weeks of manual teacher grading.
                   </CardDescription>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  <Button
+                    size="sm"
+                    onClick={() => handleOpenGradeEntry("Biology", "Grade 10-A (SSS 1)")}
+                    className="h-8 text-xs gap-1.5 font-bold shadow-xs bg-emerald-600 hover:bg-emerald-700 text-white"
+                  >
+                    <Award className="size-3.5" />
+                    <span>New Grade Entry</span>
+                  </Button>
+
+                  <Button
+                    size="sm"
+                    onClick={() => setReportCardStudent("Samuel Adeyemi")}
+                    className="h-8 text-xs gap-1.5 font-bold shadow-xs bg-primary hover:bg-primary/90 text-primary-foreground"
+                  >
+                    <FileText className="size-3.5" />
+                    <span>Official Report Card (PDF)</span>
+                  </Button>
+
                   <Button
                     variant="outline"
                     size="sm"
@@ -565,6 +663,9 @@ export function ModuleView({ slug }: ModuleViewProps) {
               </div>
             </CardContent>
           </Card>
+
+          {/* Interactive Weekly Teaching Schedule & Period Grid */}
+          <TeacherWeeklyCalendarView onOpenNewGradeEntry={handleOpenGradeEntry} />
         </div>
       )}
 
@@ -677,6 +778,41 @@ export function ModuleView({ slug }: ModuleViewProps) {
         studentName={selectedStudentForModal}
         open={!!selectedStudentForModal}
         onOpenChange={(open) => !open && setSelectedStudentForModal(null)}
+      />
+
+      <BankTransferUploaderDialog
+        open={bankTransferOpen}
+        onOpenChange={setBankTransferOpen}
+        defaultStudent="Samuel Adeyemi"
+        defaultInvoiceId="INV-2026-085"
+        defaultAmount="₦35,000"
+        defaultFeeType="School Bus Shuttle (Route #4)"
+        onSubmitted={handleNewTransferSubmission}
+      />
+
+      <BursarApprovalQueueDialog
+        open={bursarQueueOpen}
+        onOpenChange={setBursarQueueOpen}
+        submissions={bursarSubmissions}
+        onApprove={handleApproveTransfer}
+        onReject={handleRejectTransfer}
+      />
+
+      <OfficialReportCardDialog
+        studentName={reportCardStudent}
+        open={!!reportCardStudent}
+        onOpenChange={(open) => !open && setReportCardStudent(null)}
+      />
+
+      {/* NEW GRADE ENTRY CONTINUOUS ASSESSMENT MODAL */}
+      <NewGradeEntryDialog
+        open={gradeEntryOpen}
+        onOpenChange={setGradeEntryOpen}
+        initialSubject={gradeEntrySubject}
+        initialClass={gradeEntryClass}
+        onGradesSaved={() => {
+          toast.success("Continuous assessment marks persisted & updated in broadsheet.")
+        }}
       />
     </div>
   )

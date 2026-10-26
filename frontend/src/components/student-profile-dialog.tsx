@@ -9,8 +9,8 @@ import {
   User,
   HeartPulse,
   Smartphone,
-  Download,
   Sparkles,
+  FileText,
 } from "lucide-react"
 import { toast } from "sonner"
 import {
@@ -23,6 +23,7 @@ import {
 import { Button } from "~/components/ui/button"
 import { Badge } from "~/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
+import { OfficialReportCardDialog } from "~/components/official-report-card-dialog"
 
 export interface StudentProfileData {
   id: string
@@ -244,6 +245,8 @@ export function StudentProfileDialog({
   open,
   onOpenChange,
 }: StudentProfileDialogProps) {
+  const [reportCardOpen, setReportCardOpen] = React.useState(false)
+
   if (!studentName) return null
 
   const student = STUDENT_DATABASE[studentName] || generateDefaultProfile(studentName)
@@ -258,14 +261,9 @@ export function StudentProfileDialog({
     })
   }
 
-  const handleDownloadTranscript = () => {
-    toast.success(`Transcript downloaded: ${student.admissionNo}_Transcript.pdf`, {
-      description: "Official verified transcript with QR verification seal.",
-    })
-  }
-
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <>
+      <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto p-0">
         {/* Banner Header */}
         <div className="bg-linear-to-r from-primary/15 via-background to-secondary/15 p-6 border-b">
@@ -290,7 +288,7 @@ export function StudentProfileDialog({
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <Button
                   size="sm"
                   onClick={handleOpenFreeWhatsApp}
@@ -302,11 +300,11 @@ export function StudentProfileDialog({
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={handleDownloadTranscript}
-                  className="text-xs h-8 gap-1.5"
+                  onClick={() => setReportCardOpen(true)}
+                  className="text-xs h-8 gap-1.5 border-primary/40 text-primary hover:bg-primary/10 font-semibold"
                 >
-                  <Download className="size-3.5" />
-                  <span className="hidden sm:inline">Export PDF</span>
+                  <FileText className="size-3.5" />
+                  <span>Official Report Card</span>
                 </Button>
               </div>
             </div>
@@ -574,5 +572,12 @@ export function StudentProfileDialog({
         </div>
       </DialogContent>
     </Dialog>
+
+    <OfficialReportCardDialog
+      studentName={student.name}
+      open={reportCardOpen}
+      onOpenChange={setReportCardOpen}
+    />
+  </>
   )
 }
