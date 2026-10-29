@@ -582,6 +582,11 @@ export const sidebarNavCategories: NavCategory[] = [
             url: "/dashboard/operations/campus/transport/fees",
             icon: Coins,
           },
+          {
+            title: "Route Manifest",
+            url: "/dashboard/operations/campus/transport/manifest",
+            icon: ClipboardCheck,
+          },
         ],
       },
       {
@@ -630,6 +635,11 @@ export const sidebarNavCategories: NavCategory[] = [
             title: "Hostel Fees",
             url: "/dashboard/operations/campus/hostel/fees",
             icon: Wallet,
+          },
+          {
+            title: "Exeat Passes",
+            url: "/dashboard/operations/campus/hostel/exeat",
+            icon: Ticket,
           },
         ],
       },

@@ -18,7 +18,7 @@ export default function SignupPage() {
   const [email, setEmail] = React.useState("s.vance@oakridge.edu")
   const [phone, setPhone] = React.useState("+234 803 123 4567")
   const [password, setPassword] = React.useState("securepass123")
-  const [planSelected, setPlanSelected] = React.useState("Growth Plan (₦120,000/mo)")
+  const [planSelected, setPlanSelected] = React.useState("Growth Plan (₦85,000/mo)")
   const [currency, setCurrency] = React.useState("NGN")
   const [submitting, setSubmitting] = React.useState(false)
 
@@ -196,8 +196,8 @@ export default function SignupPage() {
                     onChange={(e) => setPlanSelected(e.target.value)}
                     className="w-full h-9 rounded-md border border-input bg-background px-3 text-xs font-medium text-primary"
                   >
-                    <option value="Starter Plan (₦50,000/mo)">Starter — ₦50,000 / mo (~$35 USD)</option>
-                    <option value="Growth Plan (₦120,000/mo)">Growth — ₦120,000 / mo (~$80 USD)</option>
+                    <option value="Starter Plan (₦35,000/mo)">Starter — ₦35,000 / mo</option>
+                    <option value="Growth Plan (₦85,000/mo)">Growth — ₦85,000 / mo</option>
                     <option value="Enterprise Tier (Custom — Discuss with Sales Rep)">Enterprise — Custom (Discuss with Sales Rep)</option>
                   </select>
                 </div>
@@ -213,7 +213,6 @@ export default function SignupPage() {
                     className="w-full h-9 rounded-md border border-input bg-background px-3 text-xs"
                   >
                     <option value="NGN">Nigerian Naira (₦ NGN)</option>
-                    <option value="USD">US Dollars ($ USD)</option>
                   </select>
                 </div>
               </div>

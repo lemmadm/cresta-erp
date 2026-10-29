@@ -9,22 +9,22 @@ import { CheckCircle2, ChevronRight, Building2, Sparkles, MessageCircle } from "
 import { CreateInstitutionDialog } from "~/components/create-institution-dialog";
 
 export function PricingSection() {
-  const [selectedPlanForModal, setSelectedPlanForModal] = React.useState<string>("Growth Plan (₦120,000/mo)")
+  const [selectedPlanForModal, setSelectedPlanForModal] = React.useState<string>("Growth Plan (₦85,000/mo)")
   const [modalOpen, setModalOpen] = React.useState(false)
 
   const plans = [
     {
       name: "Starter",
-      planId: "Starter Plan (₦50,000/mo)",
+      planId: "Starter Plan (₦35,000/mo)",
       isCustom: false,
-      price: "₦50,000",
+      price: "₦35,000",
       period: "/month",
-      secondaryPrice: "~$35 USD / month",
+      secondaryPrice: "",
       description: "For primary schools and academies up to 300 students",
       features: [
         "Up to 300 enrolled students",
         "Academics & Daily Attendance tracking",
-        "Fee Management & Invoicing in Naira & USD",
+        "Fee Management & Invoicing in Nigerian Naira (₦)",
         "Parent SMS & WhatsApp Notification Alerts",
         "Standard Cresta Institutional Support",
       ],
@@ -33,11 +33,11 @@ export function PricingSection() {
     },
     {
       name: "Growth",
-      planId: "Growth Plan (₦120,000/mo)",
+      planId: "Growth Plan (₦85,000/mo)",
       isCustom: false,
-      price: "₦120,000",
+      price: "₦85,000",
       period: "/month",
-      secondaryPrice: "~$80 USD / month",
+      secondaryPrice: "",
       description: "For growing secondary schools and colleges up to 1,500 students",
       features: [
         "Up to 1,500 enrolled students",
@@ -93,7 +93,7 @@ export function PricingSection() {
 
           <div className="inline-flex items-center rounded-lg border border-border p-1 bg-muted/40 mt-4">
             <span className="rounded-md px-3.5 py-1.5 text-xs font-semibold bg-background text-foreground shadow-xs">
-              Nigerian Naira (₦ NGN) &bull; USD Equivalent Shown
+              100% Nigerian Naira (₦ NGN) &bull; Direct Bank Settlement
             </span>
           </div>
         </div>
@@ -137,9 +137,6 @@ export function PricingSection() {
                         </span>
                         <span className="text-xs text-muted-foreground font-medium">{plan.period}</span>
                       </div>
-                      <span className="text-[11px] text-muted-foreground mt-0.5 font-medium">
-                        {plan.secondaryPrice}
-                      </span>
                     </div>
                   )}
                 </div>
@@ -153,7 +150,7 @@ export function PricingSection() {
                     </li>
                   ))}
                 </ul>
-                <div className="space-y-2 pt-2 border-t border-border/50">
+                <div className="pt-2 border-t border-border/50">
                   <Button
                     variant={plan.highlighted ? "default" : "outline"}
                     className="w-full text-xs font-semibold gap-1.5 shadow-xs"
@@ -173,11 +170,6 @@ export function PricingSection() {
                       </>
                     )}
                   </Button>
-                  <p className="text-[10px] text-center text-muted-foreground">
-                    {plan.isCustom 
-                      ? "Custom pricing & dedicated onboarding consultation"
-                      : "Direct submission to Neon database • Instant trial"}
-                  </p>
                 </div>
               </CardContent>
             </Card>
@@ -186,7 +178,7 @@ export function PricingSection() {
 
         <div className="mt-12 text-center">
           <p className="text-xs text-muted-foreground">
-            Starter (₦50k/mo) &bull; Growth (₦120k/mo) &bull; Enterprise is <strong>Custom (based on discussion with our sales rep)</strong>.
+            Starter (₦35k/mo) &bull; Growth (₦85k/mo) &bull; Enterprise is <strong>Custom (based on discussion with our sales rep)</strong>.
           </p>
         </div>
       </div>

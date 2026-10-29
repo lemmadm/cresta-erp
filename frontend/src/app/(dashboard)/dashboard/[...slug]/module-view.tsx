@@ -36,7 +36,10 @@ import {
 import { OfficialReportCardDialog } from "~/components/official-report-card-dialog"
 import { NewGradeEntryDialog } from "~/components/new-grade-entry-dialog"
 import { TeacherWeeklyCalendarView } from "~/components/teacher-weekly-calendar-view"
-import { Award } from "lucide-react"
+import { HostelExeatSystem } from "~/components/hostel-exeat-system"
+import { TransportRouteManifest } from "~/components/transport-route-manifest"
+import { StudentEnrolmentDialog } from "~/components/student-enrolment-dialog"
+import { Award, Hotel, Bus, UserPlus } from "lucide-react"
 
 interface ModuleViewProps {
   slug: string[]
@@ -56,6 +59,7 @@ export function ModuleView({ slug }: ModuleViewProps) {
   const [gradeEntryOpen, setGradeEntryOpen] = React.useState(false)
   const [gradeEntrySubject, setGradeEntrySubject] = React.useState("Biology")
   const [gradeEntryClass, setGradeEntryClass] = React.useState("Grade 10-A (SSS 1)")
+  const [enrolmentDialogOpen, setEnrolmentDialogOpen] = React.useState(false)
 
   const handleOpenGradeEntry = (subject?: string, classArm?: string) => {
     if (subject) setGradeEntrySubject(subject)
@@ -163,6 +167,9 @@ export function ModuleView({ slug }: ModuleViewProps) {
   const isCommunicationModule = fullPath.includes("communication") || fullPath.includes("outreach") || fullPath.includes("messages")
   const isFinanceModule = fullPath.includes("finance") || fullPath.includes("fees") || fullPath.includes("payments") || fullPath.includes("invoices")
   const isAcademicsModule = fullPath.includes("academics") || fullPath.includes("attendance") || fullPath.includes("exams") || fullPath.includes("classes")
+  const isHostelModule = fullPath.includes("hostel") || fullPath.includes("boarding") || fullPath.includes("exeat")
+  const isTransportModule = fullPath.includes("transport") || fullPath.includes("vehicles") || fullPath.includes("routes") || fullPath.includes("stops") || fullPath.includes("manifest")
+  const isAdmissionModule = fullPath.includes("admission") || fullPath.includes("enrollment") || fullPath.includes("inquiries") || fullPath.includes("registration")
 
   const title = slug
     .map((s) => s.split("-").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" "))
@@ -192,6 +199,36 @@ export function ModuleView({ slug }: ModuleViewProps) {
 
           <div className="flex flex-wrap items-center gap-2">
             <Button
+              size="sm"
+              onClick={() => setEnrolmentDialogOpen(true)}
+              className="text-xs gap-1.5 h-9 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold"
+            >
+              <UserPlus className="size-3.5" />
+              <span>New Admission</span>
+            </Button>
+            <Button
+              asChild
+              variant={isHostelModule ? "default" : "outline"}
+              size="sm"
+              className="text-xs gap-1.5 h-9"
+            >
+              <Link href="/dashboard/operations/campus/hostel/exeat">
+                <Hotel className="size-3.5 text-primary" />
+                <span>Hostel Exeats</span>
+              </Link>
+            </Button>
+            <Button
+              asChild
+              variant={isTransportModule ? "default" : "outline"}
+              size="sm"
+              className="text-xs gap-1.5 h-9"
+            >
+              <Link href="/dashboard/operations/campus/transport/manifest">
+                <Bus className="size-3.5 text-primary" />
+                <span>Transport Routes</span>
+              </Link>
+            </Button>
+            <Button
               variant="outline"
               size="sm"
               onClick={() => setInstModalOpen(true)}
@@ -200,10 +237,10 @@ export function ModuleView({ slug }: ModuleViewProps) {
               <Building2 className="size-3.5 text-primary" />
               <span>Create Institution</span>
             </Button>
-            <Button asChild size="sm" className="text-xs gap-1.5 h-9">
+            <Button asChild size="sm" variant="ghost" className="text-xs gap-1.5 h-9">
               <Link href="/dashboard">
                 <ArrowRight className="size-3.5" />
-                <span>Return to Overview</span>
+                <span>Overview</span>
               </Link>
             </Button>
           </div>
@@ -670,7 +707,196 @@ export function ModuleView({ slug }: ModuleViewProps) {
       )}
 
       {/* ------------------------------------------------------------- */}
-      {/* 4. STUDENT & PARENT DIRECTORY (WITH 1-CLICK FREE WHATSAPP)     */}
+      {/* 4. DEDICATED LOGISTICS MODULE: HOSTEL EXEAT SYSTEM            */}
+      {/* ------------------------------------------------------------- */}
+      {isHostelModule && (
+        <div className="space-y-6">
+          <HostelExeatSystem />
+        </div>
+      )}
+
+      {/* ------------------------------------------------------------- */}
+      {/* 5. DEDICATED LOGISTICS MODULE: TRANSPORT ROUTE MANIFEST       */}
+      {/* ------------------------------------------------------------- */}
+      {isTransportModule && (
+        <div className="space-y-6">
+          <TransportRouteManifest />
+        </div>
+      )}
+
+      {/* ------------------------------------------------------------- */}
+      {/* 6. NIGERIAN ADMISSION & STUDENT ENROLMENT WORKSPACE          */}
+      {/* ------------------------------------------------------------- */}
+      {isAdmissionModule && (
+        <div className="space-y-6">
+          <div className="grid gap-4 sm:grid-cols-4">
+            <Card className="border-border shadow-xs">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-xs font-medium text-muted-foreground">Applications Received</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">142</div>
+                <p className="text-xs text-emerald-600 mt-0.5 font-medium">+18 this week</p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-border shadow-xs">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-xs font-medium text-muted-foreground">Officially Enrolled</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-emerald-600">98 Students</div>
+                <p className="text-xs text-muted-foreground mt-0.5">NERDC Bio-data Verified</p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-border shadow-xs">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-xs font-medium text-muted-foreground">Hostel Boarders</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-purple-600">41 Boarders</div>
+                <p className="text-xs text-muted-foreground mt-0.5">Allocated Rooms</p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-border shadow-xs">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-xs font-medium text-muted-foreground">Day Bus Transit</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-blue-600">57 Commuters</div>
+                <p className="text-xs text-muted-foreground mt-0.5">Assigned to Shuttle Routes</p>
+              </CardContent>
+            </Card>
+          </div>
+
+          <Card className="border-border shadow-xs">
+            <CardHeader className="border-b pb-3">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <CardTitle className="text-base font-bold">
+                      Institutional Admissions &amp; Enrolment Register
+                    </CardTitle>
+                    <Badge variant="outline" className="text-[10px] border-emerald-400 text-emerald-600 bg-emerald-500/10 font-bold">
+                      NERDC / UBEC Compliant
+                    </Badge>
+                  </div>
+                  <CardDescription className="text-xs">
+                    Comprehensive Nigerian bio-data verification (NIN, State/LGA of origin, genotype, blood group, boarding allocation)
+                  </CardDescription>
+                </div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <Button
+                    size="sm"
+                    onClick={() => setEnrolmentDialogOpen(true)}
+                    className="h-8 text-xs gap-1.5 font-bold shadow-xs bg-emerald-600 hover:bg-emerald-700 text-white"
+                  >
+                    <UserPlus className="size-3.5" />
+                    <span>New Admission / Registration</span>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => toast.success("Batch admission slips sent to official school laser printer queue.")}
+                    className="h-8 text-xs gap-1.5"
+                  >
+                    <Download className="size-3.5" />
+                    <span>Print Batch Slips</span>
+                  </Button>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="pt-3">
+              <div className="overflow-x-auto">
+                <table className="w-full text-xs">
+                  <thead>
+                    <tr className="border-b bg-muted/40 text-left font-semibold text-muted-foreground">
+                      <th className="p-2.5">Admission ID</th>
+                      <th className="p-2.5">Student Full Name</th>
+                      <th className="p-2.5">Target Class</th>
+                      <th className="p-2.5">State &amp; LGA</th>
+                      <th className="p-2.5 text-center">Genotype / Blood</th>
+                      <th className="p-2.5 text-center">Type</th>
+                      <th className="p-2.5">Guardian Contact</th>
+                      <th className="p-2.5 text-center">Status</th>
+                      <th className="p-2.5 text-center">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y">
+                    {[
+                      { id: "CRST-2026-0042", name: "Samuel Babatunde Adeyemi", classArm: "Grade 10-A (SSS 1)", state: "Lagos / Ikeja", blood: "AA / O+", type: "Boarding", guardian: "Chief B. Adeyemi (08031112233)", status: "Admitted" },
+                      { id: "CRST-2026-0043", name: "Aisha Fatima Bello", classArm: "Grade 10-A (SSS 1)", state: "Kano / Fagge", blood: "AA / A+", type: "Day Student", guardian: "Mrs. K. Bello (08023334455)", status: "Admitted" },
+                      { id: "CRST-2026-0044", name: "Chinedu Emmanuel Okeke", classArm: "Grade 10-A (SSS 1)", state: "Anambra / Idemili", blood: "AS / O+", type: "Day Student", guardian: "Mr. O. Okeke (08095556677)", status: "Verified" },
+                      { id: "CRST-2026-0045", name: "Zainab Maryam Ibrahim", classArm: "Grade 10-A (SSS 1)", state: "Kaduna / Zaria", blood: "AA / B+", type: "Boarding", guardian: "Alhaji Ibrahim (08137778899)", status: "Admitted" },
+                      { id: "CRST-2026-0046", name: "David Segun Adeleke", classArm: "Grade 10-A (SSS 1)", state: "Osun / Ede North", blood: "AA / O+", type: "Day Student", guardian: "Chief Adeleke (08059990011)", status: "Pending Interview" },
+                      { id: "CRST-2026-0047", name: "Blessing Chioma Eze", classArm: "Grade 10-A (SSS 1)", state: "Enugu / Nsukka", blood: "AA / O+", type: "Day Student", guardian: "Dr. K. Eze (08072223344)", status: "Admitted" },
+                    ].map((stu) => (
+                      <tr key={stu.id} className="hover:bg-muted/20">
+                        <td className="p-2.5 font-mono text-[11px] font-bold text-primary">{stu.id}</td>
+                        <td className="p-2.5 font-bold text-foreground">
+                          <button
+                            type="button"
+                            onClick={() => setSelectedStudentForModal(stu.name)}
+                            className="hover:underline hover:text-primary text-left cursor-pointer flex items-center gap-1"
+                          >
+                            <span>{stu.name}</span>
+                            <ExternalLink className="size-2.5 text-muted-foreground" />
+                          </button>
+                        </td>
+                        <td className="p-2.5 text-muted-foreground">{stu.classArm}</td>
+                        <td className="p-2.5 text-muted-foreground">{stu.state}</td>
+                        <td className="p-2.5 text-center font-mono text-[11px]">{stu.blood}</td>
+                        <td className="p-2.5 text-center">
+                          <Badge
+                            variant="outline"
+                            className={`text-[10px] ${
+                              stu.type === "Boarding"
+                                ? "border-purple-300 text-purple-700 bg-purple-500/10"
+                                : "border-blue-300 text-blue-700 bg-blue-500/10"
+                            }`}
+                          >
+                            {stu.type}
+                          </Badge>
+                        </td>
+                        <td className="p-2.5 text-muted-foreground text-[11px]">{stu.guardian}</td>
+                        <td className="p-2.5 text-center">
+                          <Badge
+                            variant="outline"
+                            className={`text-[10px] ${
+                              stu.status === "Admitted"
+                                ? "border-emerald-300 text-emerald-700 bg-emerald-500/10 font-bold"
+                                : stu.status === "Verified"
+                                ? "border-blue-300 text-blue-700 bg-blue-500/10 font-medium"
+                                : "border-amber-300 text-amber-700 bg-amber-500/10 font-medium"
+                            }`}
+                          >
+                            {stu.status}
+                          </Badge>
+                        </td>
+                        <td className="p-2.5 text-center">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setEnrolmentDialogOpen(true)}
+                            className="h-6 text-[10px] text-primary hover:bg-primary/10 font-semibold px-2"
+                          >
+                            Enrolment Slip
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {/* ------------------------------------------------------------- */}
+      {/* 7. STUDENT & PARENT DIRECTORY (WITH 1-CLICK FREE WHATSAPP)     */}
       {/* ------------------------------------------------------------- */}
       <Card className="border-border shadow-xs">
         <CardHeader className="border-b pb-3">
@@ -812,6 +1038,17 @@ export function ModuleView({ slug }: ModuleViewProps) {
         initialClass={gradeEntryClass}
         onGradesSaved={() => {
           toast.success("Continuous assessment marks persisted & updated in broadsheet.")
+        }}
+      />
+
+      {/* NIGERIAN SIS ADMISSION & ENROLMENT REGISTRATION FORM */}
+      <StudentEnrolmentDialog
+        open={enrolmentDialogOpen}
+        onOpenChange={setEnrolmentDialogOpen}
+        onStudentEnrolled={(newStudent) => {
+          toast.success("Official Admission Enrolment Complete!", {
+            description: `${newStudent.first_name} ${newStudent.surname} registered under ${newStudent.admission_number}.`,
+          })
         }}
       />
     </div>

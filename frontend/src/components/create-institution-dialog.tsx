@@ -35,7 +35,7 @@ interface CreateInstitutionDialogProps {
 export function CreateInstitutionDialog({
   open,
   onOpenChange,
-  defaultPlan = "Growth Plan (₦120,000/mo)",
+  defaultPlan = "Growth Plan (₦85,000/mo)",
 }: CreateInstitutionDialogProps) {
   const [schoolName, setSchoolName] = React.useState("")
   const [adminName, setAdminName] = React.useState("")
@@ -379,8 +379,8 @@ export function CreateInstitutionDialog({
                   onChange={(e) => setStudentCount(e.target.value)}
                   className="w-full h-9 rounded-md border border-input bg-background px-3 text-xs"
                 >
-                  <option value="Under 300 students">Under 300 students (Starter - ₦50k/mo)</option>
-                  <option value="300 - 1,500 students">300 - 1,500 students (Growth - ₦120k/mo)</option>
+                  <option value="Under 300 students">Under 300 students (Starter - ₦35k/mo)</option>
+                  <option value="300 - 1,500 students">300 - 1,500 students (Growth - ₦85k/mo)</option>
                   <option value="1,500+ students">1,500+ students (Enterprise Custom)</option>
                   <option value="Multi-Campus Network">Multi-Campus Chain (Custom SLA)</option>
                 </select>
@@ -388,7 +388,7 @@ export function CreateInstitutionDialog({
 
               <div className="space-y-1.5">
                 <Label htmlFor="inst-plan" className="text-xs font-semibold">
-                  Subscription Tier (Naira &amp; Dollars)
+                  Subscription Tier (Nigerian Naira)
                 </Label>
                 <select
                   id="inst-plan"
@@ -396,8 +396,8 @@ export function CreateInstitutionDialog({
                   onChange={(e) => setPlanSelected(e.target.value)}
                   className="w-full h-9 rounded-md border border-input bg-background px-3 text-xs font-medium text-primary"
                 >
-                  <option value="Starter Plan (₦50,000/mo)">Starter Plan — ₦50,000 / month (~$35 USD)</option>
-                  <option value="Growth Plan (₦120,000/mo)">Growth Plan — ₦120,000 / month (~$80 USD) [Popular]</option>
+                  <option value="Starter Plan (₦35,000/mo)">Starter Plan — ₦35,000 / month</option>
+                  <option value="Growth Plan (₦85,000/mo)">Growth Plan — ₦85,000 / month [Popular]</option>
                   <option value="Enterprise Tier (Custom — Discuss with Sales Rep)">Enterprise Tier — Custom (Discuss with Sales Rep)</option>
                 </select>
               </div>
@@ -413,7 +413,6 @@ export function CreateInstitutionDialog({
                   className="w-full h-9 rounded-md border border-input bg-background px-3 text-xs"
                 >
                   <option value="NGN">Nigerian Naira (₦ NGN)</option>
-                  <option value="USD">US Dollars ($ USD)</option>
                 </select>
               </div>
 

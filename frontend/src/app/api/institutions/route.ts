@@ -42,7 +42,7 @@ export async function POST(request: Request) {
       email: body.email.trim(),
       phone: body.phone?.trim() || '',
       student_count: body.student_count || '300 - 1,500 students',
-      plan_selected: body.plan_selected || 'Growth Plan (₦120,000/mo)',
+      plan_selected: body.plan_selected || 'Growth Plan (₦85,000/mo)',
       currency: body.currency || 'NGN',
       country: body.country || 'Nigeria',
       notes: body.notes?.trim() || '',

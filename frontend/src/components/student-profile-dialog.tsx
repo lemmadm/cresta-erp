@@ -193,10 +193,13 @@ const STUDENT_DATABASE: Record<string, StudentProfileData> = {
 }
 
 function generateDefaultProfile(name: string): StudentProfileData {
+  const hash = name.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0)
+  const idSuffix = String((hash % 80) + 10)
+  const admSuffix = String((hash % 8000) + 1000)
   return {
-    id: `STU-00${Math.floor(Math.random() * 80 + 10)}`,
+    id: `STU-00${idSuffix}`,
     name,
-    admissionNo: `OAK-2023-${Math.floor(Math.random() * 8000 + 1000)}`,
+    admissionNo: `OAK-2023-${admSuffix}`,
     gender: name.includes("Blessing") || name.includes("Zainab") ? "Female" : "Male",
     dob: "12 Oct 2011 (Age 15)",
     class: "Grade 10 - Section A (SSS 1)",

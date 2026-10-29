@@ -10,9 +10,7 @@ import {
   TrendingUp,
   Clock,
   ArrowUpRight,
-  Plus,
   BookOpen,
-  Bell,
   Download,
   FileText,
   DollarSign,
@@ -29,6 +27,9 @@ import {
   ExternalLink,
   UploadCloud,
   FileCheck,
+  Hotel,
+  Bus,
+  UserPlus,
 } from "lucide-react"
 import {
   ResponsiveContainer,
@@ -64,6 +65,9 @@ import {
 import { OfficialReportCardDialog } from "~/components/official-report-card-dialog"
 import { NewGradeEntryDialog } from "~/components/new-grade-entry-dialog"
 import { TeacherWeeklyCalendarView } from "~/components/teacher-weekly-calendar-view"
+import { HostelExeatSystem } from "~/components/hostel-exeat-system"
+import { TransportRouteManifest } from "~/components/transport-route-manifest"
+import { StudentEnrolmentDialog } from "~/components/student-enrolment-dialog"
 
 // --- DATA STRUCTURES ---
 
@@ -106,12 +110,12 @@ const classAttendanceSummary = [
 
 // Quick Actions Launchpad
 const adminQuickActions = [
-  { label: "Take Attendance", href: "/dashboard/academics/attendance", icon: CalendarCheck },
-  { label: "New Admission", href: "/dashboard/students/admission", icon: Plus },
-  { label: "Fee Collection", href: "/dashboard/finance/fees", icon: CreditCard },
-  { label: "Class Timetable", href: "/dashboard/academics/timetable", icon: Clock },
-  { label: "Publish Notice", href: "/dashboard/communication/notice-board", icon: Bell },
-  { label: "Exam Schedules", href: "/dashboard/examination/schedules", icon: BookOpen },
+  { label: "Take Attendance", href: "/dashboard/academics/attendance", icon: CalendarCheck, actionKey: "attendance" },
+  { label: "New Admission", href: "/dashboard/academics/admissions/enrollment", icon: UserPlus, actionKey: "enrolment" },
+  { label: "Hostel Exeats", href: "/dashboard/operations/campus/hostel/exeat", icon: Hotel, actionKey: "hostel" },
+  { label: "Transport Manifest", href: "/dashboard/operations/campus/transport/manifest", icon: Bus, actionKey: "transport" },
+  { label: "Fee Collection", href: "/dashboard/operations/finance/payments", icon: CreditCard, actionKey: "finance" },
+  { label: "Class Timetable", href: "/dashboard/academics/timetable", icon: Clock, actionKey: "timetable" },
 ]
 
 const recentAnnouncements = [
@@ -251,6 +255,8 @@ export default function DashboardPage() {
   const [gradeEntryOpen, setGradeEntryOpen] = React.useState(false)
   const [gradeEntrySubject, setGradeEntrySubject] = React.useState("Biology")
   const [gradeEntryClass, setGradeEntryClass] = React.useState("Grade 10-A (SSS 1)")
+  const [enrolmentModalOpen, setEnrolmentModalOpen] = React.useState(false)
+  const [adminTab, setAdminTab] = React.useState<"analytics" | "hostel" | "transport">("analytics")
 
   const handleOpenGradeEntry = (subject?: string, classArm?: string) => {
     if (subject) setGradeEntrySubject(subject)
@@ -504,6 +510,14 @@ export default function DashboardPage() {
               <div className="flex flex-wrap items-center gap-2 shrink-0">
                 <Button
                   size="sm"
+                  onClick={() => setEnrolmentModalOpen(true)}
+                  className="h-9 gap-1.5 text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs"
+                >
+                  <UserPlus className="size-4" />
+                  <span>New Student Enrolment</span>
+                </Button>
+                <Button
+                  size="sm"
                   variant="outline"
                   onClick={() => setBursarQueueOpen(true)}
                   className="h-9 gap-1.5 text-xs font-semibold border-emerald-400 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/20"
@@ -532,7 +546,81 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Admin KPI Stats Grid */}
+          {/* Dedicated Logistics Modules & Campus Operations Navigation Tabs */}
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b pb-3">
+            <div className="flex flex-wrap items-center gap-2">
+              <Button
+                variant={adminTab === "analytics" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setAdminTab("analytics")}
+                className="h-8 text-xs font-semibold gap-1.5"
+              >
+                <BarChart3 className="size-3.5" />
+                <span>Executive Analytics &amp; Roll Call</span>
+              </Button>
+              <Button
+                variant={adminTab === "hostel" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setAdminTab("hostel")}
+                className={`h-8 text-xs font-semibold gap-1.5 ${
+                  adminTab === "hostel"
+                    ? "bg-purple-600 hover:bg-purple-700 text-white font-bold"
+                    : "border-purple-300 text-purple-700 dark:text-purple-300 hover:bg-purple-500/10"
+                }`}
+              >
+                <Hotel className="size-3.5 text-purple-500" />
+                <span>Hostel Exeat System</span>
+                <Badge variant="outline" className="text-[10px] ml-1 bg-purple-500/10 border-purple-300 text-purple-700 dark:text-purple-300">
+                  Dedicated Tab
+                </Badge>
+              </Button>
+              <Button
+                variant={adminTab === "transport" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setAdminTab("transport")}
+                className={`h-8 text-xs font-semibold gap-1.5 ${
+                  adminTab === "transport"
+                    ? "bg-blue-600 hover:bg-blue-700 text-white font-bold"
+                    : "border-blue-300 text-blue-700 dark:text-blue-300 hover:bg-blue-500/10"
+                }`}
+              >
+                <Bus className="size-3.5 text-blue-500" />
+                <span>Transport Route Manifest</span>
+                <Badge variant="outline" className="text-[10px] ml-1 bg-blue-500/10 border-blue-300 text-blue-700 dark:text-blue-300">
+                  4 Routes
+                </Badge>
+              </Button>
+            </div>
+
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => setEnrolmentModalOpen(true)}
+              className="h-8 text-xs gap-1.5 border-emerald-400 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/10 font-semibold"
+            >
+              <UserPlus className="size-3.5 text-emerald-600" />
+              <span>Nigerian Bio-Data Admission Form</span>
+            </Button>
+          </div>
+
+          {/* DEDICATED TAB: HOSTEL EXEAT SYSTEM */}
+          {adminTab === "hostel" && (
+            <div className="space-y-6">
+              <HostelExeatSystem />
+            </div>
+          )}
+
+          {/* DEDICATED TAB: TRANSPORT ROUTE MANIFEST */}
+          {adminTab === "transport" && (
+            <div className="space-y-6">
+              <TransportRouteManifest />
+            </div>
+          )}
+
+          {/* TAB: EXECUTIVE ANALYTICS */}
+          {adminTab === "analytics" && (
+            <div className="space-y-6">
+              {/* Admin KPI Stats Grid */}
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <Card className="border-border shadow-xs">
               <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
@@ -800,6 +888,51 @@ export default function DashboardPage() {
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
                 {adminQuickActions.map((action) => {
                   const Icon = action.icon
+                  if (action.actionKey === "enrolment") {
+                    return (
+                      <button
+                        key={action.label}
+                        type="button"
+                        onClick={() => setEnrolmentModalOpen(true)}
+                        className="flex flex-col items-center justify-center p-3 rounded-xl border border-emerald-300 dark:border-emerald-800 bg-emerald-500/10 hover:bg-emerald-500/20 transition-colors text-center group cursor-pointer"
+                      >
+                        <div className="size-9 rounded-lg bg-emerald-600 text-white flex items-center justify-center mb-2 group-hover:scale-105 transition-transform">
+                          <Icon className="size-4" />
+                        </div>
+                        <span className="text-xs font-bold text-emerald-800 dark:text-emerald-300 line-clamp-1">{action.label}</span>
+                      </button>
+                    )
+                  }
+                  if (action.actionKey === "hostel") {
+                    return (
+                      <button
+                        key={action.label}
+                        type="button"
+                        onClick={() => setAdminTab("hostel")}
+                        className="flex flex-col items-center justify-center p-3 rounded-xl border border-purple-300 dark:border-purple-800 bg-purple-500/10 hover:bg-purple-500/20 transition-colors text-center group cursor-pointer"
+                      >
+                        <div className="size-9 rounded-lg bg-purple-600 text-white flex items-center justify-center mb-2 group-hover:scale-105 transition-transform">
+                          <Icon className="size-4" />
+                        </div>
+                        <span className="text-xs font-bold text-purple-800 dark:text-purple-300 line-clamp-1">{action.label}</span>
+                      </button>
+                    )
+                  }
+                  if (action.actionKey === "transport") {
+                    return (
+                      <button
+                        key={action.label}
+                        type="button"
+                        onClick={() => setAdminTab("transport")}
+                        className="flex flex-col items-center justify-center p-3 rounded-xl border border-blue-300 dark:border-blue-800 bg-blue-500/10 hover:bg-blue-500/20 transition-colors text-center group cursor-pointer"
+                      >
+                        <div className="size-9 rounded-lg bg-blue-600 text-white flex items-center justify-center mb-2 group-hover:scale-105 transition-transform">
+                          <Icon className="size-4" />
+                        </div>
+                        <span className="text-xs font-bold text-blue-800 dark:text-blue-300 line-clamp-1">{action.label}</span>
+                      </button>
+                    )
+                  }
                   return (
                     <Link
                       key={action.label}
@@ -936,6 +1069,8 @@ export default function DashboardPage() {
           </div>
         </div>
       )}
+    </div>
+  )}
 
       {/* ========================================================= */}
       {/* 2. TEACHER PERSPECTIVE */}
@@ -1489,7 +1624,7 @@ export default function DashboardPage() {
                 <div className="flex justify-between pt-1 border-t text-sm">
                   <span className="font-bold text-foreground">Amount:</span>
                   <span className="font-extrabold text-purple-700 dark:text-purple-300">
-                    ₦35,000 (~$25 USD)
+                    ₦35,000 (NGN)
                   </span>
                 </div>
               </div>
@@ -1504,7 +1639,7 @@ export default function DashboardPage() {
                     Bank Transfer
                   </div>
                   <div className="p-2 border rounded-md text-center bg-card font-semibold cursor-pointer hover:border-primary">
-                    USD Card ($)
+                    Direct USSD / NIBSS
                   </div>
                 </div>
               </div>
@@ -1584,6 +1719,17 @@ export default function DashboardPage() {
         initialClass={gradeEntryClass}
         onGradesSaved={() => {
           toast.success("Grade entries synchronized across teacher dashboard.")
+        }}
+      />
+
+      {/* NIGERIAN SIS ADMISSION & ENROLMENT REGISTRATION FORM */}
+      <StudentEnrolmentDialog
+        open={enrolmentModalOpen}
+        onOpenChange={setEnrolmentModalOpen}
+        onStudentEnrolled={(newStudent) => {
+          toast.success("New Student Admission Registered!", {
+            description: `${newStudent.first_name} ${newStudent.surname} registered under ${newStudent.admission_number}.`,
+          })
         }}
       />
     </div>
